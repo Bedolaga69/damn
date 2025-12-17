@@ -1,3 +1,5 @@
+from Items import *
+
 class Character:
     def __init__(self, name, health, attack, defense):
         self.name = name
