@@ -19,6 +19,7 @@ class Character:
         other_character.get_damage(self.attack)
 
     def use_item(self, item):
+        if isinstance(item, Consumable):
             if item in self.inventory:
                 print(f"{self.name} использует {item}")
                 self.inventory.remove(item)
