@@ -40,6 +40,12 @@ class Character:
         print(f"{item} добавлен в инвентарь {self.name}")
 
 
+item_type_list = ["potion", "weapon", "armor", "consumable"]
+effect_type_list = ["heal", "buff_attack", "buff_defense"]
+
+
+potion = Consumable("фласка", "восстанавливает 30 здоровья",95, "лечение", 40)
+armor = Equipment("броня", "дает 50 брони", "нагрудник", 50, 250)
 warrior = Character("воин", 100, 25, 10)
 maga = Character("маг", 80, 30, 25)
 
