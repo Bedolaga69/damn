@@ -23,6 +23,15 @@ class Character:
             if item in self.inventory:
                 print(f"{self.name} использует {item}")
                 self.inventory.remove(item)
+                if item.effect_type == "heal":
+                    self.health += item.effect_value
+                    print(f"текущее хп {self.name} = {self.health}")
+                elif item.effect_type == "buff_defense":
+                    self.defense += item.effect_value
+                    print(f"текущая защита {self.name} = {self.defense}")
+                elif item.effect_type == "buff_attack":
+                    self.attack += item.effect_value
+                    print(f"текущая атака {self.name} = {self.attack}")
             else:
                 print(f"предмет {item} не найден в инвентаре")
 
