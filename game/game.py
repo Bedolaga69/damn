@@ -38,7 +38,7 @@ class Game:
     def _create_default_enemies(self, count):
             """Приватный метод для создания набора врагов."""
             enemy_templates = [
-                ("Гоблин", 80, 8, 15),
+                ("Гоблин", 28, 8, 15),
                 ("Орк", 100, 12, 30),
                 ("Скелет", 50, 10, 15)
             ]
@@ -78,7 +78,7 @@ class Game:
             target = self.enemies[0]
             self.current_player.attack_target(target)
 
-            if target.health <= 0:# проверка на живучесть цели после удара
+            if not target.is_alive(): # проверка на живучесть цели после удара
                 print(f"враг {target.name} мертв")
                 self.enemies.pop(0)
         # elif answer == "2":
@@ -88,7 +88,7 @@ class Game:
         attaker = self.enemies[0]
         print(f"ход врага {attaker.name}")
         attaker.attack_target(self.current_player)
-        self.enemies.pop(0)
+        # self.enemies.pop(0)
 
     def stop_game(self):
         answer = input("вы действительно хотите выйти? "
