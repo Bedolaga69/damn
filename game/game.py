@@ -81,7 +81,8 @@ class Game:
             if target.health <= 0:# проверка на живучесть цели после удара
                 print(f"враг {target.name} мертв")
                 self.enemies.pop(0)
-
+        # elif answer == "2":
+        #     target = self.enemies[0]
     def _process_enemy_turn(self):
         """Метод для автоматического хода противника"""
         attaker = self.enemies[0]
