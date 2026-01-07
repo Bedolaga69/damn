@@ -12,6 +12,7 @@ class Unit:
     def get_damage(self, amount):
         actual_damage = max(amount - self.defense, 0)
         if self.health <= actual_damage:
+            self.health = 0
             print(f"{self.name} повержен!")
         else:
             self.health -= actual_damage
