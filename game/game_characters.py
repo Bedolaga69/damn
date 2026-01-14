@@ -1,32 +1,8 @@
-from Items import *
+import random
+from game_units import *
 
-class Unit:
-    def __init__(self, name, health, attack, defense):
-        self.name = name
-        self.health = health
-        self.attack = attack
-        self.defense = defense
-        self.max_health = health
-
-    def get_damage(self, amount):
-        actual_damage = max(amount - self.defense, 0)
-        if self.health <= actual_damage:
-            self.health = 0
-            print(f"{self.name} повержен!")
-        else:
-            self.health -= actual_damage
-            print(f"{self.name} получает {actual_damage} урона, здоровье: {self.health}")
-
-    def attack_target(self, other_character):
-        print(f"{self.name} атакует {other_character.name}!")
-        other_character.get_damage(self.attack)
-
-    def is_alive(self):
-        return self.health > 0
-
-
-class Character(Unit):
-    def __init__(self, name, health, attack, defense,  equipped_weapon = None, equipped_armor = None):
+class Warrior(Unit):
+    def __init__(self, name, health, attack, defense, equipped_weapon=None, equipped_armor=None):
         super().__init__(name, health, attack, defense)
         self.inventory = []
         self.equipped_weapon = equipped_weapon
@@ -83,44 +59,29 @@ class Character(Unit):
         self.inventory.append(item)
         print(f"{item} добавлен в инвентарь {self.name}")
 
-
-
-class Enemy(Unit):
-    def __init__(self, name, health, defense, attack):
+class Mage(Warrior):
+    def __init__(self, name, health, attack, defense, equipped_weapon=None, equipped_armor=None):
         super().__init__(name, health, attack, defense)
 
+    def random_get_damage(self, amount):
+        actual_damage = random.randint(10, 30), max(amount - self.defense, 0)
+        actual_damage += amount
+        print(f"урон повысился на: {actual_damage}")
+        if self.health <= actual_damage:
+            self.health = 0
+            print(f"{self.name} повержен!")
+        else:
+            self.health -= actual_damage
+            print(f"{self.name} получает {actual_damage} урона, здоровье: {self.health}")
 
+class Archer(Warrior):
+    def __init__(self, name, health, attack, defense, equipped_weapon=None, equipped_armor=None):
+        super().__init__(name, health, attack, defense)
 
-
-# item_type_list = ["potion", "weapon", "armor", "consumable"]
-# effect_type_list = ["heal", "buff_attack", "buff_defense"]
-#
-#
-# potion = Consumable("фласка", "восстанавливает 30 здоровья",95, "heal", 40)
-armor = Equipment("броня", "дает 50 брони", "armor", 50, 250, 25)
-mage_armor = Equipment("мантия", "дает 100 брони", "armor", 125, 150, 50)
-leather_armor = Equipment("кожаные поножи", "дает 45 брони", "armor", 55, 45, 15)
-# warrior = Character("воин", 100, 25, 10, None, armor)
-# maga = Character("маг", 80, 30, 25, None, mage_armor)
-# weapon = Equipment("меч", "дает 33 урона", "weapon", 300, 33, 33)
-#
-#
-# warrior.inventory.append(leather_armor)
-# print(warrior.inventory[0])
-# warrior.use_item(warrior.inventory[0])
-#
-# maga.inventory.append(mage_armor)
-# maga.inventory.append(potion)
-# maga.use_item(mage_armor)
-# maga.use_item(potion)
-#
-# warrior.inventory.append(weapon)
-# warrior.use_item(weapon)
-#
-# warrior.attack_target(maga)
-# warrior.inventory.append(potion)
-# warrior.use_item(potion)
-#
-# warrior.use_item(potion)
-#
-# print(warrior.inventory)
+    def critical_damage(self, amount):
+        actual_damage = random.randint(1, 5)
+        if actual_damage == 3:
+            amount = self.attack * 1.5
+            print("критический урон!")
+        else:
+            amount = self.attack

@@ -1,6 +1,5 @@
 from game_units import *
 
-
 class Game:
     def __init__(self, name, description):
         self.name = name
@@ -22,15 +21,19 @@ class Game:
         if answer == "1":
             self.current_player = self.characters_templates["1"]
             print("вы выбрали война!")
+            print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья",95, "heal", 30))}")
         elif answer == "2":
             self.current_player = self.characters_templates["2"]
-            print("вы выбрали мага!")
+            print("вы выбрали волшебника!")
+            print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье защиты", "дает 30 защиты",95, "buff_defense", 30))}")
         elif answer == "3":
             self.current_player = self.characters_templates["3"]
             print("вы выбрали лучника!")
+            print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье урона", "дает 30 урона", 95, "buff_attack", 30))}")
         else:
             self.current_player = self.characters_templates["1"]
             print("некорректный выбор, по умолчанию выбран воин")
+            print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья", 95, "heal", 30))}")
         self._create_default_enemies(4)
         self._start_battle_loop()
 
@@ -81,8 +84,12 @@ class Game:
             if not target.is_alive(): # проверка на живучесть цели после удара
                 print(f"враг {target.name} мертв")
                 self.enemies.pop(0)
-        # elif answer == "2":
-        #     target = self.enemies[0]
+
+        elif answer == "2":
+            print(f"ваш инвентарь: {self.current_player.inventory}")
+            answer = int(input("введите порядковый номер предмета: "))
+            self.current_player.use_item(self.current_player.inventory[answer])
+
     def _process_enemy_turn(self):
         """Метод для автоматического хода противника"""
         attaker = self.enemies[0]
