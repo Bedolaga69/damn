@@ -50,7 +50,6 @@ class Character(Unit):
                         self.inventory.append(old_weapon)
                     self.equipped_weapon = item
                     self.attack += item.effect_value
-                    self.inventory.remove(item)
                     print(f"вы экипировали {item.name}")
                 elif item.equipment_type == "armor":
                     if self.equipped_armor is not None:
@@ -59,8 +58,8 @@ class Character(Unit):
                         self.inventory.append(old_armor)
                     self.equipped_armor = item
                     self.defense += item.effect_value
-                    self.inventory.remove(item)
                     print(f"вы экипировали {item.name}")
+                self.inventory.remove(item)
             else:
                 print(f"предмета {item.name} нет в инвентаре")
 
@@ -76,6 +75,7 @@ class Character(Unit):
                 elif item.effect_type == "buff_attack":
                     self.attack += item.effect_value
                     print(f"текущая атака {self.name} = {self.attack}")
+                self.inventory.remove(item)
             else:
                 print(f"предмета {item.name} нет в инвентаре")
 

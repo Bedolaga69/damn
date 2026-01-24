@@ -57,41 +57,60 @@ class Game:
     def _start_battle_loop(self):
         while self.current_player.is_alive() and len(self.enemies) > 0: #проверка на хп игрока и на то есть ли враги
             self._process_player_action()# Вызываем ход игрока
-
+            if not self.is_running:
+                break
             if len(self.enemies) > 0:# проверка есть ли враги
                 self._process_enemy_turn()# если есть, то атакуют
 
-        if self.current_player.is_alive() <= 0:# проверка на хп игрока
-            print("вы проиграли... игра окончена!")
-            self.is_running = False
+        if self.current_player.is_alive():# проверка на хп игрока
+            if len(self.enemies) > 0:
+                print("вы убежали от врагов")
+            else:
+                print("победа!!!!!!!!!!!")
         else:
-            print("победа! все враги повержены!")
+            print("вы проиграли, игра окончена...")
+            self.is_running = False
 
     def _process_player_action(self):
         """метод для обработки выбора игрока"""
+        # if self.is_running:
         print(f"моя защита: {self.current_player.defense}, мое HP: {self.current_player.health}/{self.current_player.max_health}")
         current_target = self.enemies[0]
         print(f"Противник: {current_target.name} (HP: {current_target.health})")
+        while True:
+            answer = input("что вы хотите сделать?"
+                               "\n1 - атаковать"
+                               "\n2 - использовать предмет"
+                               "\n3 - убежать: ")
 
-        answer = input("что вы хотите сделать?"
-                           "\n1 - атаковать"
-                           "\n2 - использовать предмет: ")
+            if answer == "1":
+                target = self.enemies[0]
+                self.current_player.attack_target(target)
 
-        if answer == "1":
-            target = self.enemies[0]
-            self.current_player.attack_target(target)
+                if not target.is_alive(): # проверка на живучесть цели после удара
+                    print(f"враг {target.name} мертв")
+                    self.enemies.pop(0)
 
-            if not target.is_alive(): # проверка на живучесть цели после удара
-                print(f"враг {target.name} мертв")
-                self.enemies.pop(0)
+            elif answer == "2":
+                print(f"ваш инвентарь: {self.current_player.inventory}")
+                item_answer = int(input("введите порядковый номер предмета: "))#поменять инт и сделать его как отдельную проверку от инпута т.е сначала инпут потом уже проверка на число ли это
+                if len(self.current_player.inventory) >= item_answer:
+                    self.current_player.use_item(self.current_player.inventory[item_answer-1])
+                else:
+                    print("такого предмета в инвентаре нет")
 
-        elif answer == "2":
-            print(f"ваш инвентарь: {self.current_player.inventory}")
-            answer = int(input("введите порядковый номер предмета: "))
-            self.current_player.use_item(self.current_player.inventory[answer])
+            elif answer == "3":
+                self.is_running = False
+                # game.stop_game()
+                break
+
+            else:
+                print("введено не правильное число")
+
 
     def _process_enemy_turn(self):
         """Метод для автоматического хода противника"""
+        # if self.is_running:
         attaker = self.enemies[0]
         print(f"ход врага {attaker.name}")
         attaker.attack_target(self.current_player)
