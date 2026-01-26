@@ -1,4 +1,5 @@
 from game_units import *
+import random
 
 class Game:
     def __init__(self, name, description):
@@ -64,7 +65,12 @@ class Game:
 
         if self.current_player.is_alive():# проверка на хп игрока
             if len(self.enemies) > 0:
-                print("вы убежали от врагов")
+                rndm = random.randint(0, 3)
+                if rndm == 2:
+                    print("вам повезло! вы убежали от врагов")
+                else:
+                    print("вы проиграли, у вас не получилось убежать...")
+                    self.is_running = False
             else:
                 print("победа!!!!!!!!!!!")
         else:
@@ -90,14 +96,20 @@ class Game:
                 if not target.is_alive(): # проверка на живучесть цели после удара
                     print(f"враг {target.name} мертв")
                     self.enemies.pop(0)
+                break
 
             elif answer == "2":
                 print(f"ваш инвентарь: {self.current_player.inventory}")
-                item_answer = int(input("введите порядковый номер предмета: "))#поменять инт и сделать его как отдельную проверку от инпута т.е сначала инпут потом уже проверка на число ли это
-                if len(self.current_player.inventory) >= item_answer:
-                    self.current_player.use_item(self.current_player.inventory[item_answer-1])
+                item_answer = input("введите порядковый номер предмета: ")#поменять инт и сделать его как отдельную проверку от инпута т.е сначала инпут потом уже проверка на число ли это
+                if item_answer.isdigit():
+                    item_answer = int(item_answer)
+                    if len(self.current_player.inventory) >= item_answer:
+                        self.current_player.use_item(self.current_player.inventory[item_answer - 1])
+                        break
+                    else:
+                        print("такого предмета в инвентаре нет")
                 else:
-                    print("такого предмета в инвентаре нет")
+                    print("вы ввели не число, повторите ввод")
 
             elif answer == "3":
                 self.is_running = False
