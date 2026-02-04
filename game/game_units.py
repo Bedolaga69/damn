@@ -9,7 +9,7 @@ class Unit:
         self.max_health = health
 
     def get_damage(self, amount):
-        actual_damage = max(amount - self.defense, 0)
+        actual_damage = max(amount - self.defense, 1)
         if self.health <= actual_damage:
             self.health = 0
             print(f"{self.name} повержен!")
@@ -86,7 +86,7 @@ class Character(Unit):
 
 
 class Enemy(Unit):
-    def __init__(self, name, health, defense, attack):
+    def __init__(self, name, health, attack, defense):
         super().__init__(name, health, attack, defense)
 
 

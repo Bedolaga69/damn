@@ -1,3 +1,4 @@
+from game_characters import *
 from game_units import *
 import random
 
@@ -11,28 +12,24 @@ class Game:
         self.current_player = None
         self.current_enemy = None
 
+
     def start_game(self):
         print("добро пожаловать в игру!")
         self.is_running = True
         self.characters_templates = {
-            "1": Character("Воин", 100, 20, 15),
-            "2": Character("Маг", 70, 35, 5),
-            "3": Character("Лучник", 85, 25, 10)}
+            "1": Warrior,
+            "2": Mage,
+            "3": Archer
+        }
         answer = input("выберите персонажа 1-3: воин - 1, маг - 2, лучник - 3 :")
-        if answer == "1":
-            self.current_player = self.characters_templates["1"]
-            print("вы выбрали война!")
+        if answer in self.characters_templates:
+            char_name = input("введите имя героя: ")
+            ClassType = self.characters_templates[answer]
+            self.current_player = ClassType(name=char_name)
+            print(f"\nвы выбрали {self.current_player.name}")
             print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья",95, "heal", 30))}")
-        elif answer == "2":
-            self.current_player = self.characters_templates["2"]
-            print("вы выбрали волшебника!")
-            print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье защиты", "дает 30 защиты",95, "buff_defense", 30))}")
-        elif answer == "3":
-            self.current_player = self.characters_templates["3"]
-            print("вы выбрали лучника!")
-            print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье урона", "дает 30 урона", 95, "buff_attack", 30))}")
         else:
-            self.current_player = self.characters_templates["1"]
+            self.current_player = self.characters_templates["1"]("воин")
             print("некорректный выбор, по умолчанию выбран воин")
             print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья", 95, "heal", 30))}")
         self._create_default_enemies(4)
@@ -42,9 +39,9 @@ class Game:
     def _create_default_enemies(self, count):
             """Приватный метод для создания набора врагов."""
             enemy_templates = [
-                ("Гоблин", 28, 8, 15),
-                ("Орк", 100, 12, 30),
-                ("Скелет", 50, 10, 15)
+                ("Гоблин", 28, 8, 7),
+                ("Орк", 100, 12, 13),
+                ("Скелет", 50, 10, 5)
             ]
 
             for i in range(count):
