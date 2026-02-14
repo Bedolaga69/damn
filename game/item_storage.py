@@ -32,13 +32,29 @@ class LootTable:
     def add_drop(self, item_key, probability):
         self.loot_pool[item_key] = probability
 
-    def generate_loot(self):
+    def generate_loot(self, num_rolls=1):         #закинуть предметы(строки) с верояюностью потом роллить их потом закинуть в список и потом вернуть их
         loot_list = []
+        for g in range(num_rolls):
+            # ГЕНЕРАЦИЯ ЧИСЛА
+            roll = random.random()
 
-        pass
+            # ОСТЛЕЖИВАНИЕ ВРОЯТНОСТИ
+            cumulative_probability = 0
+
+            # ПРОХОД ПО ВСЕМ ПРЕДМЕТАМ
+            for item_key, probability in self.loot_pool.items():
+                cumulative_probability += probability
+                if roll <= cumulative_probability:
+                    if item_key in ITEMS:
+                        loot_list.append(ITEMS[item_key])
+                    break
+
+        return loot_list
 
 
 test = LootTable()
 test.add_drop("heal_potion", 0.2)
 test.add_drop("defense_potion", 0.3)
+print(test.loot_pool)
+print(test.generate_loot(3))
 print(test.loot_pool)
