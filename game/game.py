@@ -87,13 +87,17 @@ class Game:
                                "\n3 - убежать: ")
 
             if answer == "1":
-                target = self.enemies[0]
-                self.current_player.attack_target(target)
+                self.current_player.attack_target(current_target)
 
-                if not target.is_alive(): # проверка на живучесть цели после удара
-                    print(f"враг {target.name} мертв")
+
+                if not current_target.is_alive(): # проверка на живучесть цели после удара
+                    print(f"враг {current_target.name} мертв")
                     self.enemies.pop(0)
+                    self.current_player.reset_damage()
+                else:
+                    self.current_player.buff_damage()
                 break
+
 
             elif answer == "2":
                 print(f"ваш инвентарь: {self.current_player.inventory}")
