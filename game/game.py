@@ -1,5 +1,6 @@
 from game_characters import *
 from game_units import *
+from item_storage import *
 import random
 
 class Game:
@@ -114,7 +115,6 @@ class Game:
 
             elif answer == "3":
                 self.is_running = False
-                # game.stop_game()
                 break
 
             else:
