@@ -40,7 +40,6 @@ class LootTable:
 
             # ОТСЛЕЖИВАНИЕ ВEРОЯТНОСТИ
             cumulative_probability = 0
-
             # ПРОХОД ПО ВСЕМ ПРЕДМЕТАМ
             for item_key, probability in self.loot_pool.items():
                 cumulative_probability += probability
