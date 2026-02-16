@@ -38,7 +38,7 @@ class LootTable:
             # ГЕНЕРАЦИЯ ЧИСЛА
             roll = random.random()
 
-            # ОСТЛЕЖИВАНИЕ ВРОЯТНОСТИ
+            # ОТСЛЕЖИВАНИЕ ВEРОЯТНОСТИ
             cumulative_probability = 0
 
             # ПРОХОД ПО ВСЕМ ПРЕДМЕТАМ
