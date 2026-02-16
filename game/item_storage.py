@@ -10,20 +10,6 @@ ITEMS = {
     "bib": Equipment("броня", "дает 50 брони", "armor", 50, 250, 25)
 }
 
-# LOOT_TABLES = {
-#     "Гоблин": [
-#         {"item": "health_potion", "chance": 0.3, "min": 1, "max": 1},
-#         {"item": "defense_potion", "chance": 0.3, "min": 1, "max": 1}
-#     ],
-#     "Орк": [
-#         {"item": "health_potion", "chance": 0.5, "min": 1, "max": 1},
-#         {"item": "sword", "chance": 0.1, "min": 1, "max": 1}
-#     ],
-#     "Скелет": [
-#         {"item": "mana_potion", "chance": 0.7, "min": 1, "max": 1},
-#         {"item": "bib", "chance": 0.1, "min": 1, "max": 1}
-#     ]
-# }
 
 class LootTable:
     def __init__(self):
