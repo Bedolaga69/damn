@@ -7,7 +7,7 @@ ITEMS = {
     "attack_potion": Consumable("зелье урона", "дает +10 к урону", 150, "buff_attack", 10),
     "defense_potion": Consumable("зелье защиты", "дает +15 к защите", 100, "buff_defense", 15),
     "sword": Equipment("меч", "дает 33 урона", "weapon", 300, 33, 33),
-    "bib": Equipment("броня", "дает 50 брони", "armor", 50, 250, 25)
+    "armor": Equipment("броня", "дает 50 брони", "armor", 50, 250, 25)
 }
 
 
