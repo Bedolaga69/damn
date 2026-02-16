@@ -32,7 +32,6 @@ class LootTable:
                     if item_key in ITEMS:
                         loot_list.append(ITEMS[item_key])
                     break
-
         return loot_list
 
 
