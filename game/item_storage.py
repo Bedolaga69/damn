@@ -37,6 +37,11 @@ test.add_drop("heal_potion", 0.4)
 test.add_drop("defense_potion", 0.3)
 test.add_drop("sword", 0.1)
 test.add_drop("armor", 0.08)
+enemy_loot = {
+    "гоблин": test.generate_loot(1),
+    "орк": test.generate_loot(2),
+    "скелет": test.generate_loot(1),
+}
 # print(test.loot_pool)
 # print(test.generate_loot())
 # print(test.loot_pool)
