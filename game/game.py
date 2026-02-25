@@ -49,7 +49,7 @@ class Game:
                 # Выбираем шаблон врага циклически
                 template = enemy_templates[i % len(enemy_templates)]
                 name, hp, atk, dfns = template
-                self.enemies.append(Enemy(f"{name} {i+1}", hp, atk, dfns))
+                self.enemies.append(Enemy(name, hp, atk, dfns))
 
             print(f"вы оглянулись и увидели {len(self.enemies)} врагов")
 
@@ -89,7 +89,6 @@ class Game:
 
             if answer == "1":
                 self.current_player.attack_target(current_target)
-
 
                 if not current_target.is_alive(): # проверка на живучесть цели после удара
                     print(f"враг {current_target.name} мертв")
