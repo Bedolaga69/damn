@@ -18,7 +18,7 @@ class LootTable:
     def add_drop(self, item_key, probability):
         self.loot_pool[item_key] = probability
 
-    def generate_loot(self, num_rolls=1):
+    def generate_loot(self, templates: dict, num_rolls=1) -> list[Item]:
         loot_list = []
         for item_key, probability in self.loot_pool.items():
             roll = random.random()
@@ -26,25 +26,34 @@ class LootTable:
             for g in range(num_rolls):
                 cumulative_probability += probability
                 if roll <= cumulative_probability:
-                    if item_key in ITEMS:
-                        loot_list.append(ITEMS[item_key])
+                    if item_key in templates:
+                        loot_list.append(templates[item_key])
                     break
         return loot_list
 
 
 test = LootTable()
+strong_enemy_loot = LootTable()
+
+strong_enemy_loot.add_drop("heal_potion", 0.8)
+strong_enemy_loot.add_drop("defense_potion", 0.4)
+strong_enemy_loot.add_drop("sword", 0.1)
+strong_enemy_loot.add_drop("armor", 0.08)
+
 test.add_drop("heal_potion", 0.4)
 test.add_drop("defense_potion", 0.3)
-test.add_drop("sword", 0.1)
-test.add_drop("armor", 0.08)
+test.add_drop("sword", 0.08)
+test.add_drop("armor", 0.06)
+
 enemy_loot = {
-    "гоблин": test.generate_loot(1),
-    "орк": test.generate_loot(2),
-    "скелет": test.generate_loot(1),
+    "Гоблин": test,
+    "Орк": strong_enemy_loot,
+    "Скелет": test,
 }
+
 # print(test.loot_pool)
 # print(test.generate_loot())
 # print(test.loot_pool)
-print(test.generate_loot(3))
+# print(test.generate_loot(3))
 # print(test.loot_pool)
-
+# print(enemy_loot)
