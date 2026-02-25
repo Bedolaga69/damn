@@ -60,7 +60,7 @@ set3 = set1.union(set2)
 print(set3)
 
 """каждый символ строки становится объектом множества но элементы не повторяются"""
-my_string = "Hello, World!"#множество из строк
+my_string = "Hello, World!" #множество из строк
 my_set = set(my_string)
 print(my_set)
 
