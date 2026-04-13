@@ -29,6 +29,7 @@ class Character(Unit):
     def __init__(self, name, health, attack, defense,  equipped_weapon = None, equipped_armor = None):
         super().__init__(name, health, attack, defense)
         self.inventory = []
+        self.gold = 500
         self.equipped_weapon = equipped_weapon
         self.equipped_armor = equipped_armor
         self.base_defense = defense

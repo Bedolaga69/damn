@@ -1,5 +1,9 @@
 class Item:
-    """главный класс от которого и наследуются следующие классы"""
+    """главный класс от которого и наследуются следующие классы
+    name - имя
+    description - описание
+    item_type - тип предмета
+    value - цена предмета"""
     def __init__(self, name, description, value,effect_value, stackable = True, quantity = 1, ):
         self.name = name
         self.description = description
@@ -16,10 +20,6 @@ class Item:
 
 class Consumable(Item):
     """класс расходников (наследуется от класса Item)
-    name - имя
-    description - описание
-    item_type - тип предмета
-    value цена - предмета
     effect_type - тип эффекта
     effect_value - величина эффекта
     """
