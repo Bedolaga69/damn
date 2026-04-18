@@ -12,25 +12,30 @@ ITEMS = {
 
 
 class LootTable:
-    def __init__(self):
+    def __init__(self, guaranteed_list: list[Item] = None):
+        if guaranteed_list is None:
+            guaranteed_list = []
         self.loot_pool = {}
+        self.guaranteed_list = guaranteed_list
 
     def add_drop(self, item_key, probability):
         self.loot_pool[item_key] = probability
 
-    def generate_loot(self, templates: dict, num_rolls=1) -> list[Item]:
+    def generate_loot(self, num_rolls=1) -> list[Item]:
         loot_list = []
+        # loot_list.extend(guaranteed_list)
         for item_key, probability in self.loot_pool.items():
             roll = random.random()
             cumulative_probability = 0
             for g in range(num_rolls):
                 cumulative_probability += probability
                 if roll <= cumulative_probability:
-                    if item_key in templates:
-                        loot_list.append(templates[item_key])
+                    if item_key in ITEMS:
+                        loot_list.append(ITEMS[item_key])
                     break
         return loot_list
 
+shop_loot = LootTable([ITEMS["heal_potion"]])
 
 test = LootTable()
 strong_enemy_loot = LootTable()

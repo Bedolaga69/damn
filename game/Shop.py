@@ -1,4 +1,6 @@
+from game.game_units import Character
 from item_storage import *
+
 
 class Shop:
     def __init__(self, name: str, assortment: dict):
@@ -11,19 +13,19 @@ class Shop:
         for item_key, item in self.assortment.items():
             print(f"{item_key}, {item.name}: {item.value} монет")
 
-    def buy_item(self, character, item_key):
-        if item_key in self.assortment.items():
-            buy = self.assortment[item_key]
-            if character.gold >= buy.value:
-                character.gold -= buy.value
-                character.add_item(buy)
-                return "покупка состоялась"
+    def buy_item(self, character: Character, item_key: str):
+        if item_key in self.assortment:
+            item_to_buy = self.assortment[item_key]
+            if character.gold >= item_to_buy.value:
+                character.gold -= item_to_buy.value
+                character.add_item(item_to_buy)
+                print("покупка состоялась")
             else:
-                return "не хватает денег"
+                print("не хватает денег")
         else:
-            return "такого товара нет"
+            print("такого товара нет")
 
-    def sell_item(self, character, item_key):
+    def sell_item(self, character: Character, item_key: str):
         if item_key in character.inventory:
             print("при продаже предмет теряет 50% от стоимости")
             revenue = item_key.value // 2

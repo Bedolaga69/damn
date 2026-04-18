@@ -92,7 +92,7 @@ class Game:
 
                 if not current_target.is_alive(): # проверка на живучесть цели после удара
                     print(f"враг {current_target.name} мертв")
-                    loot = enemy_loot[current_target.name].generate_loot(ITEMS)
+                    loot = enemy_loot[current_target.name].generate_loot()
                     for i in loot:
                         self.current_player.add_item(i)
                     #пройтись for по луту и все это добавить в инвентарь
