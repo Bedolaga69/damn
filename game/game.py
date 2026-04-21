@@ -1,6 +1,7 @@
 from game_characters import *
 from game_units import *
 from item_storage import *
+from Shop import *
 import random
 
 class Game:
@@ -12,6 +13,11 @@ class Game:
         self.characters_templates = {}
         self.current_player = None
         self.current_enemy = None
+        final_assortment = {}
+        items_list = shop_loot.generate_loot(num_rolls=5)
+        for i, item in enumerate(items_list, 1):
+            final_assortment[str(i)] = item
+            self.shop = Shop("Магазинчег", final_assortment)
 
 
     def start_game(self):
@@ -85,7 +91,8 @@ class Game:
             answer = input("что вы хотите сделать?"
                                "\n1 - атаковать"
                                "\n2 - использовать предмет"
-                               "\n3 - убежать: ")
+                               "\n3 - убежать"
+                               "\n4 - зайти в магазин")
 
             if answer == "1":
                 self.current_player.attack_target(current_target)
@@ -120,6 +127,21 @@ class Game:
             elif answer == "3":
                 self.is_running = False
                 break
+
+            elif answer == "4":
+                item_answr = input("что вы хотите сделать?"
+                                   "\n1 - купить"
+                                   "\n2 - продать "
+                                   "\n3 - уйти ")
+                if item_answr == "1":
+                    self.shop.show_items()
+                    buy_answer = input("введите номер предмета: ")
+                    self.shop.buy_item(self.current_player, buy_answer)
+                elif item_answr == "2":
+                    self.shop.show_items()
+                    sell_answer = input("введите номер предмета: ")
+                    self.shop.sell_item(self.current_player, sell_answer)
+
 
             else:
                 print("введено не правильное число")

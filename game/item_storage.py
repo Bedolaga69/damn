@@ -23,7 +23,7 @@ class LootTable:
 
     def generate_loot(self, num_rolls=1) -> list[Item]:
         loot_list = []
-        # loot_list.extend(guaranteed_list)
+        loot_list.extend(self.guaranteed_list)
         for item_key, probability in self.loot_pool.items():
             roll = random.random()
             cumulative_probability = 0
@@ -35,7 +35,7 @@ class LootTable:
                     break
         return loot_list
 
-shop_loot = LootTable([ITEMS["heal_potion"]])
+shop_loot = LootTable([ITEMS["heal_potion"], ITEMS["defense_potion"]])
 
 test = LootTable()
 strong_enemy_loot = LootTable()
