@@ -1,11 +1,14 @@
+from curses.ascii import SP
+
 from game_characters import *
 from game_units import *
-from item_storage import *
 from Shop import *
+from item_storage import *
 import random
 
 class Game:
     def __init__(self, name, description):
+        self.shop = Shop("магазинчек", [])
         self.name = name
         self.description = description
         self.is_running = False
@@ -13,11 +16,6 @@ class Game:
         self.characters_templates = {}
         self.current_player = None
         self.current_enemy = None
-        final_assortment = {}
-        items_list = shop_loot.generate_loot(num_rolls=5)
-        for i, item in enumerate(items_list, 1):
-            final_assortment[str(i)] = item
-            self.shop = Shop("Магазинчег", final_assortment)
 
 
     def start_game(self):
@@ -80,6 +78,17 @@ class Game:
         else:
             print("вы проиграли, игра окончена...")
             self.is_running = False
+            
+    def start_shop_event(self):
+        if random.randint(0, 1) == 0:
+            answer = input("хотите зайти в магазин?"
+                           "\n 1 - да"
+                           "\n 2 - нет")
+            if answer == "1":
+                self.shop.assortment = shop_loot.generate_loot()
+            elif answer == "2":
+            else:
+                print("введено не правильное число")
 
     def _process_player_action(self):
         """метод для обработки выбора игрока"""
@@ -106,6 +115,7 @@ class Game:
                     print(f"игрок {self.current_player.name} получил: {loot}")
                     self.enemies.pop(0)
                     self.current_player.reset_damage()
+                    self.start_shop_event()
                 else:
                     self.current_player.buff_damage()
                 break
@@ -113,7 +123,7 @@ class Game:
 
             elif answer == "2":
                 print(f"ваш инвентарь: {self.current_player.inventory}")
-                item_answer = input("введите порядковый номер предмета: ")#поменять инт и сделать его как отдельную проверку от инпута т.е сначала инпут потом уже проверка на число ли это
+                item_answer = input("введите порядковый номер предмета: ")
                 if item_answer.isdigit():
                     item_answer = int(item_answer)
                     if len(self.current_player.inventory) >= item_answer:
@@ -141,6 +151,9 @@ class Game:
                     self.shop.show_items()
                     sell_answer = input("введите номер предмета: ")
                     self.shop.sell_item(self.current_player, sell_answer)
+                elif item_answr == "3":
+                    pass
+                    
 
 
             else:

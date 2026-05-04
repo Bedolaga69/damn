@@ -7,7 +7,9 @@ ITEMS = {
     "attack_potion": Consumable("зелье урона", "дает +10 к урону", 150, "buff_attack", 10),
     "defense_potion": Consumable("зелье защиты", "дает +15 к защите", 100, "buff_defense", 15),
     "sword": Equipment("меч", "дает 33 урона", "weapon", 300, 33, 33),
-    "armor": Equipment("броня", "дает 50 брони", "armor", 50, 250, 25)
+    "armor": Equipment("броня", "дает 50 брони", "armor", 50, 250, 25),
+    "sword_of_heaven": Equipment("меч", "дает 69 урона", "armor", 500, 69, 69),
+
 }
 
 
@@ -36,6 +38,11 @@ class LootTable:
         return loot_list
 
 shop_loot = LootTable([ITEMS["heal_potion"], ITEMS["defense_potion"]])
+shop_loot.add_drop("sword", 0.5)
+shop_loot.add_drop("armor", 0.4)
+shop_loot.add_drop("attack_potion", 0.7)
+shop_loot.add_drop("sword_of_heaven", 0.08)
+
 
 test = LootTable()
 strong_enemy_loot = LootTable()
