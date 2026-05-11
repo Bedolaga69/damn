@@ -1,5 +1,3 @@
-from curses.ascii import SP
-
 from game_characters import *
 from game_units import *
 from Shop import *
@@ -81,14 +79,34 @@ class Game:
             
     def start_shop_event(self):
         if random.randint(0, 1) == 0:
-            answer = input("хотите зайти в магазин?"
-                           "\n 1 - да"
-                           "\n 2 - нет")
-            if answer == "1":
-                self.shop.assortment = shop_loot.generate_loot()
-            elif answer == "2":
-            else:
-                print("введено не правильное число")
+            while True:
+                answer = input("хотите зайти в магазин?"
+                               "\n 1 - да"
+                               "\n 2 - нет")
+                if answer == "1":
+                    self.shop.assortment = shop_loot.generate_loot()
+                    self.shop.show_items()
+                    answer_to_buy = input("введите номер предмета для покупки(для выхода нажмите n): ")
+                    if answer_to_buy == "n":
+                        break
+                    elif answer_to_buy.isdigit():#item_index
+                        item_index = int(answer_to_buy)#извлеклось число
+                        if 0 <= item_index < len(self.shop.assortment):#есть ли такой предмет
+                            item = self.shop.assortment[item_index]#получили сам предмет
+                            if self.current_player.gold >= item.value:
+                                self.current_player.gold -= item.value
+                                self.current_player.inventory.append(item)
+                                # self.current_player.add_item(item)
+                                print(f"вы купили {item.name}, ваш баланс {self.current_player.gold}")
+                            else:
+                                print(f"недостаточно золота, ваш баланс: {self.current_player.gold}")
+                        else:
+                            print("предмета с таким номером нет")
+                        #извлечь число и попробовать провести покупку(ЗАПУСТИТЬ КОД)
+                elif answer == "2":
+                    break
+                else:
+                    print("введено не правильное число")
 
     def _process_player_action(self):
         """метод для обработки выбора игрока"""
