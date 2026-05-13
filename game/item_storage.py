@@ -43,16 +43,27 @@ class LootTable:
     def generate_loot(self, num_rolls=1) -> list[Item]:
         loot_list = []
         loot_list.extend(self.guaranteed_list)
-        for item_key, probability in self.loot_pool.items():
-            roll = random.random()
-            cumulative_probability = 0
-            for g in range(num_rolls):
-                cumulative_probability += probability
-                if roll <= cumulative_probability:
+
+        for _ in range(num_rolls):
+            for item_key, probability in self.loot_pool.items():
+                if random.random() <= probability:
                     if item_key in ITEMS:
                         loot_list.append(ITEMS[item_key])
-                    break
         return loot_list
+
+    # def generate_loot(self, num_rolls=1) -> list[Item]:
+    #     loot_list = []
+    #     loot_list.extend(self.guaranteed_list)
+    #     for item_key, probability in self.loot_pool.items():
+    #         roll = random.random()
+    #         cumulative_probability = 0
+    #         for g in range(num_rolls):
+    #             cumulative_probability += probability
+    #             if roll <= cumulative_probability:
+    #                 if item_key in ITEMS:
+    #                     loot_list.append(ITEMS[item_key])
+    #                 break
+    #     return loot_list
 
 shop_loot = LootTable([ITEMS["heal_potion"], ITEMS["defense_potion"]])
 shop_loot.add_drop("sword", 0.5)

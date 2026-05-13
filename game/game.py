@@ -30,13 +30,39 @@ class Game:
             ClassType = self.characters_templates[answer]
             self.current_player = ClassType(name=char_name)
             print(f"\nвы выбрали {self.current_player.name}")
-            print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья",95, "heal", 30))}")
+            # print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья",95, "heal", 30))}")
+            self.current_player.add_item(ITEMS["heal_potion"])
+            print(f"Вы получили стартовое снаряжение!")
         else:
             self.current_player = self.characters_templates["1"]("воин")
             print("некорректный выбор, по умолчанию выбран воин")
-            print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья", 95, "heal", 30))}")
+            # print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья", 95, "heal", 30))}
+            self.current_player.add_item(ITEMS["heal_potion"])  # Сначала даем зелье
+            print(f"Вы получили стартовое снаряжение!")
         self._create_default_enemies(4)
         self._start_battle_loop()
+
+    # def start_game(self):
+    #     print("Добро пожаловать в игру!")
+    #     self.is_running = True
+    #     self.characters_templates = {
+    #         "1": Warrior,
+    #         "2": Mage,
+    #         "3": Archer
+    #     }
+    #     answer = input("Выберите персонажа 1-3 (Воин, Маг, Лучник): ")
+    #
+    #     char_class = self.characters_templates.get(answer, Warrior)
+    #     char_name = input("Введите имя героя: ")
+    #     self.current_player = char_class(name=char_name)
+    #
+    #     # Просто добавляем предмет, не засовывая вызов функции в print
+    #     start_potion = ITEMS["heal_potion"]
+    #     self.current_player.add_item(start_potion)
+    #
+    #     print(f"\nВы начали игру за {self.current_player.name}!")
+    #     self._create_default_enemies(4)
+    #     self._start_battle_loop()
 
 
     def _create_default_enemies(self, count):
@@ -156,21 +182,28 @@ class Game:
                 self.is_running = False
                 break
 
+            # elif answer == "4":
+            #     item_answr = input("что вы хотите сделать?"
+            #                        "\n1 - купить"
+            #                        "\n2 - продать "
+            #                        "\n3 - уйти ")
+            #     if item_answr == "1":
+            #         self.shop.show_items()
+            #         buy_answer = input("введите номер предмета: ")
+            #         self.shop.buy_item(self.current_player, buy_answer)
+            #     elif item_answr == "2":
+            #         self.shop.show_items()
+            #         sell_answer = input("введите номер предмета: ")
+            #         self.shop.sell_item(self.current_player, sell_answer)
+            #     elif item_answr == "3":
+            #         pass
+
             elif answer == "4":
-                item_answr = input("что вы хотите сделать?"
-                                   "\n1 - купить"
-                                   "\n2 - продать "
-                                   "\n3 - уйти ")
-                if item_answr == "1":
-                    self.shop.show_items()
-                    buy_answer = input("введите номер предмета: ")
+                self.shop.assortment = shop_loot.generate_loot()  # Обновляем ассортимент
+                self.shop.show_items()
+                buy_answer = input("Введите номер предмета для покупки (или 'n' для выхода): ")
+                if buy_answer.lower() != 'n':
                     self.shop.buy_item(self.current_player, buy_answer)
-                elif item_answr == "2":
-                    self.shop.show_items()
-                    sell_answer = input("введите номер предмета: ")
-                    self.shop.sell_item(self.current_player, sell_answer)
-                elif item_answr == "3":
-                    pass
                     
 
 

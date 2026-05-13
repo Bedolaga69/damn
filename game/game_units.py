@@ -41,6 +41,9 @@ class Character(Unit):
         if self.equipped_weapon:
             self.attack += self.equipped_weapon.effect_value
 
+    def reset_damage(self):
+        pass
+
     def use_item(self, item):
         if isinstance(item, Equipment):
             if item in self.inventory:
@@ -82,7 +85,7 @@ class Character(Unit):
 
     def add_item(self, item):
         self.inventory.append(item)
-        print(f"{item} добавлен в инвентарь {self.name}")
+        print(f"{item.name} добавлен в инвентарь {self.name}")
 
 
 
