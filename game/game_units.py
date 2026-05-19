@@ -72,6 +72,7 @@ class Character(Unit):
                 print(f"{self.name} использует {item}")
                 if item.effect_type == "heal":
                     self.health += item.effect_value
+                    self.health = min(self.max_health, self.health)
                     print(f"текущее хп {self.name} = {self.health}")
                 elif item.effect_type == "buff_defense":
                     self.defense += item.effect_value
@@ -82,6 +83,9 @@ class Character(Unit):
                 self.inventory.remove(item)
             else:
                 print(f"предмета {item.name} нет в инвентаре")
+
+        # if self.health > self.max_health:
+        #     self.health = self.max_health
 
     def add_item(self, item):
         self.inventory.append(item)

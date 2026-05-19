@@ -45,20 +45,37 @@ class Shop:
             print("такого товара нет")
 
 
-    def sell_item(self, character: Character, item_key: str):
-        if item_key in character.inventory:
+    def sell_item(self, character: Character, item_to_sell: Item):
+        if item_to_sell in character.inventory:
             print("при продаже предмет теряет 50% от стоимости")
-            revenue = item_key.value // 2
+            revenue = item_to_sell.value // 2
             character.gold += revenue
-            character.inventory.remove(item_key)
+            character.inventory.remove(item_to_sell)
             print(f"персонаж получил: {revenue} золота, баланс: {character.gold}")
         else:
             print("предмета нет в инвентаре")
 
-shop = Shop("магазинчек", shop_loot.generate_loot())
+#     def sell_item(self, character: Character, inventory_index: Item):
+#         # if not inventory_index.isdigit():
+#         #     print("Нужно ввести номер предмета из вашего инвентаря!")
+#         #     return
+#
+#         idx = int(inventory_index)
+#         if 0 <= idx < len(character.inventory):
+#             item_to_sell = character.inventory[idx]
+#             revenue = item_to_sell.value // 2
+#             character.gold += revenue
+#
+#             print(f"Вы продали {item_to_sell.name} за {revenue} золота.")
+#             character.inventory.pop(idx)
+#             print(f"Ваш текущий баланс: {character.gold}")
+#         else:
+#             print("В вашем инвентаре нет предмета с таким номером.")
+#
+# shop = Shop("магазинчек", shop_loot.generate_loot())
 
-
-
+#
+#
 # class Shop:
 #     def __init__(self, name: str, assortment: list[Item]):
 #         self.name = name

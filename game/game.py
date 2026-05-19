@@ -36,8 +36,8 @@ class Game:
         else:
             self.current_player = self.characters_templates["1"]("воин")
             print("некорректный выбор, по умолчанию выбран воин")
-            # print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья", 95, "heal", 30))}
-            self.current_player.add_item(ITEMS["heal_potion"])  # Сначала даем зелье
+            # print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья", 95, "heal", 30))}")
+            self.current_player.add_item(ITEMS["heal_potion"])
             print(f"Вы получили стартовое снаряжение!")
         self._create_default_enemies(4)
         self._start_battle_loop()
@@ -110,25 +110,44 @@ class Game:
                                "\n 1 - да"
                                "\n 2 - нет")
                 if answer == "1":
-                    self.shop.assortment = shop_loot.generate_loot()
-                    self.shop.show_items()
-                    answer_to_buy = input("введите номер предмета для покупки(для выхода нажмите n): ")
-                    if answer_to_buy == "n":
-                        break
-                    elif answer_to_buy.isdigit():#item_index
-                        item_index = int(answer_to_buy)#извлеклось число
-                        if 0 <= item_index < len(self.shop.assortment):#есть ли такой предмет
-                            item = self.shop.assortment[item_index]#получили сам предмет
-                            if self.current_player.gold >= item.value:
-                                self.current_player.gold -= item.value
-                                self.current_player.inventory.append(item)
-                                # self.current_player.add_item(item)
-                                print(f"вы купили {item.name}, ваш баланс {self.current_player.gold}")
+                    answer_shop = input("что хотите сделать?"
+                                        "\n 1 - купить"
+                                        "\n 2 - продать"
+                                        )
+                    if answer_shop == "1":
+                        self.shop.assortment = shop_loot.generate_loot()
+                        self.shop.show_items()
+                        answer_to_buy = input("введите номер предмета для покупки(для выхода нажмите n): ")
+                        if answer_to_buy == "n":
+                            break
+                        elif answer_to_buy.isdigit():#item_index
+                            item_index = int(answer_to_buy)#извлеклось число
+                            if 0 <= item_index < len(self.shop.assortment):#есть ли такой предмет
+                                item = self.shop.assortment[item_index]#получили сам предмет
+                                if self.current_player.gold >= item.value:
+                                    self.current_player.gold -= item.value
+                                    self.current_player.inventory.append(item)
+                                    # self.current_player.add_item(item)
+                                    print(f"вы купили {item.name}, ваш баланс {self.current_player.gold}")
+                                else:
+                                    print(f"недостаточно золота, ваш баланс: {self.current_player.gold}")
                             else:
-                                print(f"недостаточно золота, ваш баланс: {self.current_player.gold}")
+                                print("предмета с таким номером нет")
+                    elif answer_shop == "2":
+                        print(f"ваш инвентарь: {self.current_player.inventory}")
+                        item_answer = input("введите порядковый номер предмета: ")
+                        if item_answer.isdigit():
+                            item_answer = int(item_answer)
+                            if len(self.current_player.inventory) > item_answer:
+                                item_to_sell = self.current_player.inventory[item_answer]
+                                self.shop.sell_item(self.current_player, item_to_sell)
+                            else:
+                                print("такого предмета в инвентаре нет")
                         else:
-                            print("предмета с таким номером нет")
-                        #извлечь число и попробовать провести покупку(ЗАПУСТИТЬ КОД)
+                            print("вы ввели не число, повторите ввод")
+                    else:
+                        print("введено не правильное число")
+
                 elif answer == "2":
                     break
                 else:
@@ -144,12 +163,12 @@ class Game:
             answer = input("что вы хотите сделать?"
                                "\n1 - атаковать"
                                "\n2 - использовать предмет"
-                               "\n3 - убежать"
-                               "\n4 - зайти в магазин")
+                               "\n3 - убежать")
 
             if answer == "1":
                 self.current_player.attack_target(current_target)
-
+                if isinstance(self.current_player, Warrior):
+                    self.current_player.buff_damage()
                 if not current_target.is_alive(): # проверка на живучесть цели после удара
                     print(f"враг {current_target.name} мертв")
                     loot = enemy_loot[current_target.name].generate_loot()
@@ -158,10 +177,11 @@ class Game:
                     #пройтись for по луту и все это добавить в инвентарь
                     print(f"игрок {self.current_player.name} получил: {loot}")
                     self.enemies.pop(0)
-                    self.current_player.reset_damage()
+                    if isinstance(self.current_player, Warrior):
+                        self.current_player.reset_damage()
                     self.start_shop_event()
-                else:
-                    self.current_player.buff_damage()
+
+
                 break
 
 
@@ -182,31 +202,29 @@ class Game:
                 self.is_running = False
                 break
 
+            # # elif answer == "4":
+            # #     item_answr = input("что вы хотите сделать?"
+            # #                        "\n1 - купить"
+            # #                        "\n2 - продать "
+            # #                        "\n3 - уйти ")
+            # #     if item_answr == "1":
+            # #         self.shop.show_items()
+            # #         buy_answer = input("введите номер предмета: ")
+            # #         self.shop.buy_item(self.current_player, buy_answer)
+            # #     elif item_answr == "2":
+            # #         self.shop.show_items()
+            # #         sell_answer = input("введите номер предмета: ")
+            # #         self.shop.sell_item(self.current_player, sell_answer)
+            # #     elif item_answr == "3":
+            # #         pass
+            #
             # elif answer == "4":
-            #     item_answr = input("что вы хотите сделать?"
-            #                        "\n1 - купить"
-            #                        "\n2 - продать "
-            #                        "\n3 - уйти ")
-            #     if item_answr == "1":
-            #         self.shop.show_items()
-            #         buy_answer = input("введите номер предмета: ")
+            #     self.shop.assortment = shop_loot.generate_loot()  # Обновляем ассортимент
+            #     self.shop.show_items()
+            #     buy_answer = input("Введите номер предмета для покупки (или 'n' для выхода): ")
+            #     if buy_answer.lower() != 'n':
             #         self.shop.buy_item(self.current_player, buy_answer)
-            #     elif item_answr == "2":
-            #         self.shop.show_items()
-            #         sell_answer = input("введите номер предмета: ")
-            #         self.shop.sell_item(self.current_player, sell_answer)
-            #     elif item_answr == "3":
-            #         pass
-
-            elif answer == "4":
-                self.shop.assortment = shop_loot.generate_loot()  # Обновляем ассортимент
-                self.shop.show_items()
-                buy_answer = input("Введите номер предмета для покупки (или 'n' для выхода): ")
-                if buy_answer.lower() != 'n':
-                    self.shop.buy_item(self.current_player, buy_answer)
-                    
-
-
+            #
             else:
                 print("введено не правильное число")
 
