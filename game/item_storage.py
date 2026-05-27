@@ -94,8 +94,12 @@ test.add_drop("armor", 0.06)
 
 enemy_loot = {
     "Гоблин": test,
-    "Орк": strong_enemy_loot,
     "Скелет": test,
+    "Орк": strong_enemy_loot,
+    "Темный Искатель": test,
+    "Каменный Голем": strong_enemy_loot,
+    "Вампир": strong_enemy_loot,
+    "Древний Лич": strong_enemy_loot, #мейби босс лут
 }
 
 # print(test.loot_pool)

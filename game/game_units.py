@@ -94,8 +94,9 @@ class Character(Unit):
 
 
 class Enemy(Unit):
-    def __init__(self, name, health, attack, defense):
+    def __init__(self, name, health, attack, defense, gold=0):
         super().__init__(name, health, attack, defense)
+        self.gold = gold
 
 
 
