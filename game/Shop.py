@@ -38,20 +38,22 @@ class Shop:
             if character.gold >= item_to_buy.value:
                 character.gold -= item_to_buy.value
                 character.add_item(item_to_buy)
-                print("покупка состоялась")
+                # print("покупка состоялась")
+                print(f"вы купили {item_to_buy.name}, ваш баланс {character.gold}")
             else:
-                print("не хватает денег")
+                # print("не хватает денег")
+                print(f"недостаточно золота, ваш баланс: {character.gold}")
         else:
-            print("такого товара нет")
+            print("предмета с таким номером нет")
 
 
     def sell_item(self, character: Character, item_to_sell: Item):
         if item_to_sell in character.inventory:
-            print("при продаже предмет теряет 50% от стоимости")
             revenue = item_to_sell.value // 2
             character.gold += revenue
             character.inventory.remove(item_to_sell)
             print(f"персонаж получил: {revenue} золота, баланс: {character.gold}")
+            self.assortment.append(item_to_sell)
         else:
             print("предмета нет в инвентаре")
 
