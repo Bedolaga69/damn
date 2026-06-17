@@ -5,7 +5,23 @@ from item_storage import *
 import random
 
 class Game:
+
     def __init__(self, name, description):
+        """инициализация полей класса
+            name
+                имя персонажа
+            description
+                описание
+            is_running
+                проверка на работает ли
+            enemies
+                список врагов
+            characters_templates
+                словарь с данными о персонаже
+            current_player
+                персонаж
+            current_enemy
+                враг"""
         self.shop = Shop("магазинчек", [])
         self.name = name
         self.description = description
@@ -17,6 +33,7 @@ class Game:
 
 
     def start_game(self):
+        """метод старта игры с выбором персонажа"""
         print("добро пожаловать в игру!")
         self.is_running = True
         self.characters_templates = {
@@ -39,42 +56,23 @@ class Game:
             # print(f"по умолчанию у вас: {self.current_player.add_item(Consumable("зелье здоровья", "восстанавливает 30 здоровья", 95, "heal", 30))}")
             self.current_player.add_item(ITEMS["heal_potion"])
             print(f"Вы получили стартовое снаряжение!")
-        self._create_default_enemies(4)
+        self._create_default_enemies(10)
         self._start_battle_loop()
 
-    # def start_game(self):
-    #     print("Добро пожаловать в игру!")
-    #     self.is_running = True
-    #     self.characters_templates = {
-    #         "1": Warrior,
-    #         "2": Mage,
-    #         "3": Archer
-    #     }
-    #     answer = input("Выберите персонажа 1-3 (Воин, Маг, Лучник): ")
-    #
-    #     char_class = self.characters_templates.get(answer, Warrior)
-    #     char_name = input("Введите имя героя: ")
-    #     self.current_player = char_class(name=char_name)
-    #
-    #     # Просто добавляем предмет, не засовывая вызов функции в print
-    #     start_potion = ITEMS["heal_potion"]
-    #     self.current_player.add_item(start_potion)
-    #
-    #     print(f"\nВы начали игру за {self.current_player.name}!")
-    #     self._create_default_enemies(4)
-    #     self._start_battle_loop()
 
 
     def _create_default_enemies(self, count):
-            """Приватный метод для создания набора врагов."""
+            """Приватный метод для создания набора врагов
+             count
+                количество врагов"""
             enemy_templates = [
-                ("Гоблин", 28, 8, 4, 15),
-                ("Скелет", 50, 10, 5, 25),
-                ("Орк", 100, 12, 13, 50),
-                ("Темный Искатель", 65, 16, 6, 35),
-                ("Каменный Голем", 150, 8, 20, 60),
-                ("Вампир", 110, 20, 10, 90),
-                ("Древний Лич", 200, 30, 15, 300)
+                ("Гоблин", 28, 15, 4, 15),
+                ("Скелет", 50, 20, 5, 25),
+                ("Орк", 100, 30, 13, 50),
+                ("Темный Искатель", 65, 41, 6, 35),
+                ("Каменный Голем", 150, 20, 20, 60),
+                ("Вампир", 110, 23, 10, 90),
+                ("Древний Лич", 200, 50, 15, 300)
                 #добавить разнообразных врагов, добавить голду с них и увел их кол-во
             ]
 
@@ -87,6 +85,7 @@ class Game:
             print(f"вы оглянулись и увидели {len(self.enemies)} врагов")
 
     def _start_battle_loop(self):
+        """начало игрового лупа """
         while self.current_player.is_alive() and len(self.enemies) > 0: #проверка на хп игрока и на то есть ли враги
             self._process_player_action()# Вызываем ход игрока
             if not self.is_running:
@@ -109,6 +108,7 @@ class Game:
             self.is_running = False
             
     def start_shop_event(self):
+        """открытие магазина для покупки предметов со своим шансом в магазине"""
         if random.random() < 0.5:
             self.shop.assortment = shop_loot.generate_loot()
             while True:
@@ -119,6 +119,7 @@ class Game:
                     answer_shop = input("что хотите сделать?"
                                         "\n 1 - купить"
                                         "\n 2 - продать"
+                                        "\n 3 - использовать предмет"
                                         )
                     if answer_shop == "1":
                         # self.shop.assortment = shop_loot.generate_loot()
@@ -139,6 +140,18 @@ class Game:
                                 print("такого предмета в инвентаре нет")
                         else:
                             print("вы ввели не число, повторите ввод")
+                    elif answer_shop == "3":
+                        print(f"ваш инвентарь: {self.current_player.inventory}")
+                        item_answer = input("введите порядковый номер предмета: ")
+                        if item_answer.isdigit():
+                            item_answer = int(item_answer)
+                            if 1 <= item_answer <= len(self.current_player.inventory):
+                                self.current_player.use_item(self.current_player.inventory[item_answer - 1])#чтоб при пустом инвентаре не выходила ошибка
+                            # if len(self.current_player.inventory) >= item_answer:
+                            #     self.current_player.use_item(self.current_player.inventory[item_answer - 1])
+                                break
+                            else:
+                                print("такого предмета в инвентаре нет")
                     else:
                         print("введено не правильное число")
 
@@ -168,9 +181,8 @@ class Game:
                     loot = enemy_loot[current_target.name].generate_loot()
                     for i in loot:
                         self.current_player.add_item(i)
-                        self.current_player.gold += current_target.gold
-                        print(f"вы обыскали труп и нашли {current_target.gold} золота! всего золота: {self.current_player.gold}")
-                    #пройтись for по луту и все это добавить в инвентарь
+                    self.current_player.gold += current_target.gold
+                    print(f"вы обыскали труп и нашли {current_target.gold} золота! всего золота: {self.current_player.gold}")
                     print(f"игрок {self.current_player.name} получил: {loot}")
                     self.enemies.pop(0)
                     if isinstance(self.current_player, Warrior):
@@ -198,29 +210,6 @@ class Game:
                 self.is_running = False
                 break
 
-            # # elif answer == "4":
-            # #     item_answr = input("что вы хотите сделать?"
-            # #                        "\n1 - купить"
-            # #                        "\n2 - продать "
-            # #                        "\n3 - уйти ")
-            # #     if item_answr == "1":
-            # #         self.shop.show_items()
-            # #         buy_answer = input("введите номер предмета: ")
-            # #         self.shop.buy_item(self.current_player, buy_answer)
-            # #     elif item_answr == "2":
-            # #         self.shop.show_items()
-            # #         sell_answer = input("введите номер предмета: ")
-            # #         self.shop.sell_item(self.current_player, sell_answer)
-            # #     elif item_answr == "3":
-            # #         pass
-            #
-            # elif answer == "4":
-            #     self.shop.assortment = shop_loot.generate_loot()  # Обновляем ассортимент
-            #     self.shop.show_items()
-            #     buy_answer = input("Введите номер предмета для покупки (или 'n' для выхода): ")
-            #     if buy_answer.lower() != 'n':
-            #         self.shop.buy_item(self.current_player, buy_answer)
-            #
             else:
                 print("введено не правильное число")
 
