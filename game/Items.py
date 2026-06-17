@@ -1,10 +1,15 @@
 class Item:
-    """главный класс от которого и наследуются следующие классы
-    name - имя
-    description - описание
-    item_type - тип предмета
-    value - цена предмета"""
+    """главный класс для всех игровых предметов
+    name
+        имя
+    description
+        описание
+    item_type
+        тип предмета
+    value
+        цена предмета"""
     def __init__(self, name, description, value,effect_value, stackable = True, quantity = 1, ):
+        """инициализирует базовый игровой предмет"""
         self.name = name
         self.description = description
         self.value = value
@@ -19,11 +24,14 @@ class Item:
         return hash(self.name)
 
 class Consumable(Item):
-    """класс расходников (наследуется от класса Item)
-    effect_type - тип эффекта
-    effect_value - величина эффекта
+    """класс расходуемых предметов
+    effect_type
+        тип эффекта
+    effect_value
+        величина эффекта
     """
     def __init__(self, name, description, value, effect_type, effect_value):
+        """инициализирует расходуемый предмет"""
         super().__init__(name, description, value, effect_value)
         self.effect_type = effect_type
     def __str__(self):
@@ -42,9 +50,12 @@ class Consumable(Item):
 
 class Equipment(Item):
     """класс снаряжения
-    durability_value - кол-во едениц снаряжения
-    equipment_type - тип желаемого снаряжения(шлем, нагрудник, поножи, обувь)"""
+    durability_value
+        кол-во едениц снаряжения
+    equipment_type
+        тип желаемого снаряжения(шлем, нагрудник, поножи, обувь)"""
     def __init__(self, name, description, equipment_type, value, effect_value, durability_value):
+        """инициализирует элемент снаряжения"""
         super().__init__(name, description, value, effect_value)
         self.durability_value = durability_value
         self.equipment_type = equipment_type

@@ -3,6 +3,9 @@ import random
 
 
 ITEMS = {
+    "gold_pouch_small": Consumable("маленький мешок золота", "дает 15 золота", 0, "gold", 15),
+    "gold_pouch_medium": Consumable("среднй мешок золота", "дает 45 золота", 0, "gold", 45),
+    "gold_pouch_large": Consumable("большой мешок золота", "дает 90 золота", 0, "gold", 90),
     "heal_potion": Consumable("зелье здоровья", "восстанавливает 30 здоровья", 95, "heal", 30),
     "attack_potion": Consumable("зелье урона", "дает +10 к урону", 150, "buff_attack", 10),
     "defense_potion": Consumable("зелье защиты", "дает +15 к защите", 100, "buff_defense", 15),
@@ -31,39 +34,58 @@ ITEMS = {
 
 
 class LootTable:
+    """класс для генерации предметов и добавления их в инвентарь"""
     def __init__(self, guaranteed_list: list[Item] = None):
+        """guaranteed_list
+                гарантированный список предметов для магазина
+                значение по умолчанию — None"""
         if guaranteed_list is None:
             guaranteed_list = []
         self.loot_pool = {}
         self.guaranteed_list = guaranteed_list
 
+
     def add_drop(self, item_key, probability):
+        """метод для добавления предметов в инвентарь по индексу
+        item_key
+            уникальный ключ предмета
+        probability
+            шанс выпадения предмета"""
         self.loot_pool[item_key] = probability
 
-    # def generate_loot(self, num_rolls=1) -> list[Item]:
-    #     loot_list = []
-    #     loot_list.extend(self.guaranteed_list)
-    #
-    #     for _ in range(num_rolls):
-    #         for item_key, probability in self.loot_pool.items():
-    #             if random.random() <= probability:
-    #                 if item_key in ITEMS:
-    #                     loot_list.append(ITEMS[item_key])
-    #     return loot_list
-
     def generate_loot(self, num_rolls=1) -> list[Item]:
+        """Метод для генерации лута через независимые броски кубика
+        num_rolls
+            количество бросков кубика, по умолчанию 1
+        list[Item]
+            список сгенерированных предметов (включая гарантированные)"""
         loot_list = []
         loot_list.extend(self.guaranteed_list)
+
         for item_key, probability in self.loot_pool.items():
-            roll = random.random()
-            cumulative_probability = 0
-            for g in range(num_rolls):
-                cumulative_probability += probability
-                if roll <= cumulative_probability:
-                    if item_key in ITEMS:
-                        loot_list.append(ITEMS[item_key])
-                    break
+            if item_key not in ITEMS:
+                continue
+
+            for _ in range(num_rolls):
+                if random.random() <= probability:
+                    loot_list.append(ITEMS[item_key])
+
         return loot_list
+
+    # def generate_loot(self, num_rolls=1) -> list[Item]:
+    #     """метод для генерации лута через накопление шанса"""
+    #     loot_list = []
+    #     loot_list.extend(self.guaranteed_list)
+    #     for item_key, probability in self.loot_pool.items():
+    #         roll = random.random()
+    #         cumulative_probability = 0
+    #         for g in range(num_rolls):
+    #             cumulative_probability += probability
+    #             if roll <= cumulative_probability:
+    #                 if item_key in ITEMS:
+    #                     loot_list.append(ITEMS[item_key])
+    #                 break
+    #     return loot_list
 
 shop_loot = LootTable([ITEMS["heal_potion"], ITEMS["defense_potion"]])
 shop_loot.add_drop("sword", 0.5)
@@ -86,11 +108,16 @@ strong_enemy_loot.add_drop("sword", 0.1)
 strong_enemy_loot.add_drop("armor", 0.08)
 strong_enemy_loot.add_drop("wooden_sword", 0.2)
 strong_enemy_loot.add_drop("chainmail", 0.3)
+strong_enemy_loot.add_drop("gold_pouch_medium", 0.3)
+strong_enemy_loot.add_drop("gold_pouch_large", 0.2)
 
 test.add_drop("heal_potion", 0.4)
 test.add_drop("defense_potion", 0.3)
 test.add_drop("sword", 0.08)
 test.add_drop("armor", 0.06)
+test.add_drop("gold_pouch_small", 0.3)
+test.add_drop("gold_pouch_medium", 0.2)
+test.add_drop("gold_pouch_large", 0.08)
 
 enemy_loot = {
     "Гоблин": test,
