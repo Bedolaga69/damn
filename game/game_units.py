@@ -1,6 +1,9 @@
+import random
+
 from Items import *
 
 class Unit:
+    """класс базовых методов для создания всех сущностей"""
     def __init__(self, name, health, attack, defense):
         self.name = name
         self.health = health
@@ -9,6 +12,12 @@ class Unit:
         self.max_health = health
 
     def get_damage(self, amount):
+        """применяет входящий урон к юниту с учетом его защиты.
+
+        Урон не может быть меньше 1, если здоровье падает до нуля или ниже,
+        юнит считается поверженным
+        amount
+            количество входящего урона"""
         actual_damage = max(amount - self.defense, 1)
         if self.health <= actual_damage:
             self.health = 0
@@ -18,15 +27,29 @@ class Unit:
             print(f"{self.name} получает {actual_damage} урона, здоровье: {self.health}")
 
     def attack_target(self, other_character):
+        """метод для атаки цели с использованием метода нанесения урона
+        other_character
+            цель, которая примет урон"""
         print(f"{self.name} атакует {other_character.name}!")
         other_character.get_damage(self.attack)
 
     def is_alive(self):
+        """проверка на жив ли противник/персонаж"""
         return self.health > 0
 
 
 class Character(Unit):
+    """класс управляемого персонажа игрока, обладающего инвентарем и экипировкой
+    inventory - инвентарь тип: список
+    gold - базовая голда
+    equipped_weapon - надетое оружие
+    equipped_armor - надетая броня
+    base_defense - базовая защита
+    base_attack - базовая атака
+    defense - защита
+    """
     def __init__(self, name, health, attack, defense,  equipped_weapon = None, equipped_armor = None):
+        """инициализирует персонажа игрока и автоматически рассчитывает бонусы от стартовой экипировки"""
         super().__init__(name, health, attack, defense)
         self.inventory = []
         self.gold = 500
@@ -42,9 +65,18 @@ class Character(Unit):
             self.attack += self.equipped_weapon.effect_value
 
     def reset_damage(self):
+        """сбрасывает временные изменения урона для персонажа"""
         pass
 
     def use_item(self, item):
+        """использует предмет из инвентаря персонажа
+
+        Если предмет - снаряжение (Equipment), он экипируется в соответствующий слот,
+        бонусы предмета добавляются к статам персонажа, а старая экипировка возвращается в инвентарь.
+        Если предмет - расходник (Consumable), применяется его эффект (лечение, бафф, кошель с золотом),
+        после чего предмет уничтожается
+        item
+            объект предмета (Equipment или Consumable), который нужно использовать"""
         if isinstance(item, Equipment):
             if item in self.inventory:
                 if item.equipment_type == "weapon":
@@ -80,20 +112,33 @@ class Character(Unit):
                 elif item.effect_type == "buff_attack":
                     self.attack += item.effect_value
                     print(f"текущая атака {self.name} = {self.attack}")
+                elif item.effect_type == "gold":
+                    max_gold_bonus = int(item.effect_value * 0.2)#случайный бонус к золоту: отнимает или прибавляет монеты в пределах 20%
+                    random_bonus = random.randint(-max_gold_bonus, max_gold_bonus)#золото либо отнимается, либо прибавляется в диапазоне max_gold_bonus
+                    self.gold += item.effect_value + random_bonus#золото прибавляется к базовому значению
+                    print(f"вы получили {item.effect_value + random_bonus} золота с мешка")
+                    # max_gold_bonus = int(item.effect_value * 0.2)
+                    # self.gold += random.randint(item.effect_value -max_gold_bonus, item.effect_value + max_gold_bonus)
                 self.inventory.remove(item)
             else:
                 print(f"предмета {item.name} нет в инвентаре")
 
-        # if self.health > self.max_health:
-        #     self.health = self.max_health
 
     def add_item(self, item):
+        """добавление предмета в инвентарь игроку
+        item
+            объект добавляемого предмета"""
         self.inventory.append(item)
         print(f"{item.name} добавлен в инвентарь {self.name}")
 
 
 
 class Enemy(Unit):
+    """класс противника (монстра), с которого игрок может получить награду
+
+        gold (int)
+            количество золота, которое перейдет игроку после победы над врагом
+    """
     def __init__(self, name, health, attack, defense, gold=0):
         super().__init__(name, health, attack, defense)
         self.gold = gold
