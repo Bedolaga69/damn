@@ -7,7 +7,7 @@ class Warrior(Character):
     multiplier_damage - переменная для сохранения увеличенного урона для война и сбрасывающая его после убийства"""
     def __init__(self, name, equipped_weapon=None, equipped_armor=None):
         """инициализирует воина с базовыми характеристиками (HP: 250, Attack: 18, Defense: 50)"""
-        super().__init__(name, 250, 18, 50, equipped_weapon, equipped_armor)
+        super().__init__(name, 250, 18, 50, attack_speed = 80, equipped_weapon = equipped_weapon, equipped_armor = equipped_armor)
         self.multiplier_damage = 1.0
 
     def attack_target(self, other_character):
@@ -32,7 +32,7 @@ class Mage(Character):
     """Класс Мага с высоким базовым уроном и случайным разбросом силы заклинаний"""
     def __init__(self, name, equipped_weapon=None, equipped_armor=None):
         """инициализирует мага с базовыми характеристиками (HP: 150, Attack: 21, Defense: 20)"""
-        super().__init__(name, 150, 21, 20, equipped_weapon, equipped_armor)
+        super().__init__(name, 150, 21, 20, attack_speed = 110, equipped_weapon = equipped_weapon, equipped_armor = equipped_armor)
 
     def attack_target(self,other_character):
         """метод атаки цели с рандомным увеличением урона от атаки
@@ -47,7 +47,7 @@ class Archer(Character):
     """Класс Лучника с высокой атакой и шансом критического попадания"""
     def __init__(self, name, equipped_weapon=None, equipped_armor=None):
         """инициализирует лучника с базовыми характеристиками (HP: 200, Attack: 30, Defense: 10)"""
-        super().__init__(name, 200, 30, 10, equipped_weapon, equipped_armor)
+        super().__init__(name, 200, 30, 10, attack_speed = 135,equipped_weapon = equipped_weapon, equipped_armor = equipped_armor)
 
     def attack_target(self,other_character):
         """метод атаки цели с шансом критического урона и увеличение урона при крит попадании вдвое

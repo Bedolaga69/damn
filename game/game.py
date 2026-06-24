@@ -86,7 +86,7 @@ class Game:
 
     def _start_battle_loop(self):
         """начало игрового лупа """
-        while self.current_player.is_alive() and len(self.enemies) > 0: #проверка на хп игрока и на то есть ли враги
+        while self.current_player.is_alive() and len(self.enemies) > 0:#проверка на хп игрока и на то есть ли враги
             self._process_player_action()# Вызываем ход игрока
             if not self.is_running:
                 break

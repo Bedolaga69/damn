@@ -4,12 +4,13 @@ from Items import *
 
 class Unit:
     """класс базовых методов для создания всех сущностей"""
-    def __init__(self, name, health, attack, defense):
+    def __init__(self, name, health, attack, defense, attack_speed = 100):
         self.name = name
         self.health = health
         self.attack = attack
         self.defense = defense
         self.max_health = health
+        self.attack_speed = attack_speed
 
     def get_damage(self, amount):
         """применяет входящий урон к юниту с учетом его защиты.
@@ -47,10 +48,11 @@ class Character(Unit):
     base_defense - базовая защита
     base_attack - базовая атака
     defense - защита
+    attack_speed - скорость атаки
     """
-    def __init__(self, name, health, attack, defense,  equipped_weapon = None, equipped_armor = None):
+    def __init__(self, name, health, attack, defense, attack_speed = 100, equipped_weapon = None, equipped_armor = None):
         """инициализирует персонажа игрока и автоматически рассчитывает бонусы от стартовой экипировки"""
-        super().__init__(name, health, attack, defense)
+        super().__init__(name, health, attack, defense, attack_speed)
         self.inventory = []
         self.gold = 500
         self.equipped_weapon = equipped_weapon
@@ -139,42 +141,14 @@ class Enemy(Unit):
         gold (int)
             количество золота, которое перейдет игроку после победы над врагом
     """
-    def __init__(self, name, health, attack, defense, gold=0):
-        super().__init__(name, health, attack, defense)
+    def __init__(self, name, health, attack, defense,gold=0, attack_speed = 100):
+        super().__init__(name, health, attack, defense, attack_speed)
         self.gold = gold
 
 
 
 
-# item_type_list = ["potion", "weapon", "armor", "consumable"]
-# effect_type_list = ["heal", "buff_attack", "buff_defense"]
-#
-#
-# potion = Consumable("фласка", "восстанавливает 30 здоровья",95, "heal", 40)
+
 armor = Equipment("броня", "дает 50 брони", "armor", 50, 250, 25)
 mage_armor = Equipment("мантия", "дает 100 брони", "armor", 125, 150, 50)
 leather_armor = Equipment("кожаные поножи", "дает 45 брони", "armor", 55, 45, 15)
-# warrior = Character("воин", 100, 25, 10, None, armor)
-# maga = Character("маг", 80, 30, 25, None, mage_armor)
-# weapon = Equipment("меч", "дает 33 урона", "weapon", 300, 33, 33)
-#
-#
-# warrior.inventory.append(leather_armor)
-# print(warrior.inventory[0])
-# warrior.use_item(warrior.inventory[0])
-#
-# maga.inventory.append(mage_armor)
-# maga.inventory.append(potion)
-# maga.use_item(mage_armor)
-# maga.use_item(potion)
-#
-# warrior.inventory.append(weapon)
-# warrior.use_item(weapon)
-#
-# warrior.attack_target(maga)
-# warrior.inventory.append(potion)
-# warrior.use_item(potion)
-#
-# warrior.use_item(potion)
-#
-# print(warrior.inventory)
