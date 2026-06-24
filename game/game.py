@@ -86,15 +86,26 @@ class Game:
 
     def _start_battle_loop(self):
         """начало игрового лупа """
-        while self.current_player.is_alive() and len(self.enemies) > 0:#проверка на хп игрока и на то есть ли враги
-            self._process_player_action()# Вызываем ход игрока
-            if not self.is_running:
-                break
-            if len(self.enemies) > 0:# проверка есть ли враги
-                self._process_enemy_turn()# если есть, то атакуют
+
+        for enemy in self.enemies:
+            while self.current_player.is_alive() and enemy.is_alive():
+                self._process_player_action(enemy)  # Вызываем ход игрока
+                if not self.is_running:
+                    break
+                if enemy.is_alive():# проверка есть ли враги
+                    self._process_enemy_turn(enemy)# если есть, то атакуют
+
+        # while self.current_player.is_alive() and len(self.enemies) > 0:#проверка на хп игрока и на то есть ли враги
+        #     self._process_player_action()# Вызываем ход игрока
+        #     if not self.is_running:
+        #         break
+        #     if len(self.enemies) > 0:# проверка есть ли враги
+        #         self._process_enemy_turn()# если есть, то атакуют
 
         if self.current_player.is_alive():# проверка на хп игрока
-            if len(self.enemies) > 0:
+
+            if len(self.enemies) > 0:# ❤️другая проверка не на количество подумать над этим❤️
+
                 rndm = random.randint(0, 3)
                 if rndm == 2:
                     print("вам повезло! вы убежали от врагов")
@@ -160,11 +171,11 @@ class Game:
                 else:
                     print("введено не правильное число")
 
-    def _process_player_action(self):
+    def _process_player_action(self, enemy):
         """метод для обработки выбора игрока"""
         # if self.is_running:
         print(f"моя защита: {self.current_player.defense}, мое HP: {self.current_player.health}/{self.current_player.max_health}")
-        current_target = self.enemies[0]
+        current_target = enemy
         print(f"Противник: {current_target.name} (HP: {current_target.health})")
         while True:
             answer = input("что вы хотите сделать?"
@@ -184,7 +195,7 @@ class Game:
                     self.current_player.gold += current_target.gold
                     print(f"вы обыскали труп и нашли {current_target.gold} золота! всего золота: {self.current_player.gold}")
                     print(f"игрок {self.current_player.name} получил: {loot}")
-                    self.enemies.pop(0)
+                    # self.enemies.pop(0)
                     if isinstance(self.current_player, Warrior):
                         self.current_player.reset_damage()
                     self.start_shop_event()
@@ -214,10 +225,10 @@ class Game:
                 print("введено не правильное число")
 
 
-    def _process_enemy_turn(self):
+    def _process_enemy_turn(self, enemy):
         """Метод для автоматического хода противника"""
         # if self.is_running:
-        attaker = self.enemies[0]
+        attaker = enemy
         print(f"ход врага {attaker.name}")
         attaker.attack_target(self.current_player)
         # self.enemies.pop(0)
