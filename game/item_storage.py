@@ -3,6 +3,9 @@ import random
 
 
 ITEMS = {
+
+    "regen_potion": Consumable("зелье здоровья", "дает регенерацию на 4 хода", 150, "apply_regeneration", 4),
+    "poison_bottle": Consumable("флакон с ядом", "отравляет на 3 хода",120, "apply_poison_potion", 3),
     "gold_pouch_small": Consumable("маленький мешок золота", "дает 15 золота", 0, "gold", 15),
     "gold_pouch_medium": Consumable("среднй мешок золота", "дает 45 золота", 0, "gold", 45),
     "gold_pouch_large": Consumable("большой мешок золота", "дает 90 золота", 0, "gold", 90),
